@@ -18,8 +18,12 @@ const hasCloudinaryConfig = [
   process.env.CLOUDINARY_API_SECRET,
 ].every(Boolean);
 
+if (process.env.NODE_ENV === 'production' && !hasCloudinaryConfig) {
+  throw new Error('Cloudinary credentials are required for production image uploads.');
+}
+
 let storage;
-if (hasCloudinaryConfig && process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   storage = new CloudinaryStorage({
     cloudinary,
     params: {
