@@ -1,6 +1,6 @@
 import express from 'express';
 import { protect } from '../middleware/authMiddleware.js';
-import { uploadImage } from '../middleware/imageUpload.js';
+import { uploadMedia } from '../middleware/imageUpload.js';
 import {
   createPost,
   getFeedPosts,
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.route('/')
   .get(protect, getFeedPosts)
-  .post(protect, uploadImage('image'), createPost);
+  .post(protect, uploadMedia('media'), createPost);
 
 router.put('/:id/like', protect, toggleLikePost);
 router.post('/:id/comment', protect, addComment);

@@ -19,7 +19,7 @@ const hasCloudinaryConfig = [
 ].every(Boolean);
 
 if (process.env.NODE_ENV === 'production' && !hasCloudinaryConfig) {
-  throw new Error('Cloudinary credentials are required for production image uploads.');
+  throw new Error('Cloudinary credentials are required for production media uploads.');
 }
 
 let storage;
@@ -28,7 +28,8 @@ if (process.env.NODE_ENV === 'production') {
     cloudinary,
     params: {
       folder: 'chalchitra',
-      allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+      resource_type: 'auto',
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4', 'webm'],
     },
   });
 } else {
@@ -45,9 +46,12 @@ if (process.env.NODE_ENV === 'production') {
 
 export const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, callback) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    callback(null, allowedTypes.includes(file.mimetype));
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      return callback(new Error('Choose a JPG, PNG, WebP, MP4, or WebM file.'));
+    }
+    callback(null, true);
   },
 });

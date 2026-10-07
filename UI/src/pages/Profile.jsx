@@ -143,11 +143,21 @@ export default function Profile() {
         <div className="grid grid-cols-3 gap-1 md:gap-4 mt-2">
           {visiblePosts.map((post) => (
             <div key={post._id} className="aspect-square bg-neutral-100 dark:bg-neutral-900 overflow-hidden cursor-pointer">
-              <img
-                src={post.imageUrl}
-                alt={post.caption}
-                className="w-full h-full object-cover hover:opacity-90 transition-opacity"
-              />
+              {post.mediaType === 'video' || post.videoUrl ? (
+                <video
+                  src={post.mediaUrl || post.videoUrl}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                />
+              ) : (
+                <img
+                  src={post.mediaUrl || post.imageUrl}
+                  alt={post.caption}
+                  className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                />
+              )}
             </div>
           ))}
         </div>

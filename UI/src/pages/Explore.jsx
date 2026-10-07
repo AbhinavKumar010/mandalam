@@ -66,11 +66,21 @@ export default function Explore() {
         {!loading && !loadError && filteredPosts.length > 0 && <div className="grid grid-cols-3 gap-1 md:gap-4">
           {filteredPosts.map((post) => (
             <button key={post._id} type="button" onClick={() => setSelectedPost(post)} aria-label={`Open post by ${post.user?.username || 'user'}`} className="relative group aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900 cursor-pointer">
-              <img
-                src={post.imageUrl}
-                alt={post.caption}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+              {post.mediaType === 'video' || post.videoUrl ? (
+                <video
+                  src={post.mediaUrl || post.videoUrl}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : (
+                <img
+                  src={post.mediaUrl || post.imageUrl}
+                  alt={post.caption}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              )}
               {/* Hover Overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-semibold text-sm">
                 <span className="flex items-center gap-1.5">

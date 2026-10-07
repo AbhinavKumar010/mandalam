@@ -11,19 +11,22 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated }) {
 
   if (!isOpen) return null;
 
-  const handleImageChange = (e) => {
+  const handleMediaChange = (e) => {
     const selected = e.target.files[0];
     if (selected) {
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(selected.type)) {
+      const isVideo = ['video/mp4', 'video/webm'].includes(selected.type);
+      const isImage = ['image/jpeg', 'image/png', 'image/webp'].includes(selected.type);
+      if (!isImage && !isVideo) {
         setFile(null);
         setPreview(null);
-        setError('Choose a JPG, PNG, or WebP image.');
+        setError('Choose a JPG, PNG, WebP, MP4, or WebM file.');
         return;
       }
-      if (selected.size > 10 * 1024 * 1024) {
+      const maxSize = isVideo ? 100 : 10;
+      if (selected.size > maxSize * 1024 * 1024) {
         setFile(null);
         setPreview(null);
-        setError('Image must be 10 MB or smaller.');
+        setError(`${isVideo ? 'Video' : 'Image'} must be ${maxSize} MB or smaller.`);
         return;
       }
       setError('');
@@ -37,7 +40,7 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated }) {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('media', file);
     formData.append('caption', caption);
 
     try {
@@ -67,12 +70,16 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated }) {
           {!preview ? (
             <label className="flex flex-col items-center justify-center border-2 border-dashed border-neutral-300 dark:border-neutral-700 h-64 rounded-lg cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800">
               <ImageIcon size={48} className="text-neutral-400 mb-2" />
-              <span className="text-sm font-medium text-neutral-500">Select photos from computer</span>
-              <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} className="hidden" />
+              <span className="text-sm font-medium text-neutral-500">Select a photo or video</span>
+              <input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" onChange={handleMediaChange} className="hidden" />
             </label>
           ) : (
             <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-black flex items-center justify-center">
-              <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+              {file.type.startsWith('video/') ? (
+                <video src={preview} controls playsInline className="h-full w-full object-contain" />
+              ) : (
+                <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+              )}
             </div>
           )}
 

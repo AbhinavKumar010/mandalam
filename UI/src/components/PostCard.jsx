@@ -5,6 +5,8 @@ import { isPostSaved, toggleSavedPost } from '../api/savedPosts';
 import Avatar from './Avatar';
 
 export default function PostCard({ post, currentUserId }) {
+  const mediaUrl = post.mediaUrl || post.videoUrl || post.imageUrl;
+  const isVideoPost = post.mediaType === 'video' || Boolean(post.videoUrl);
   const [likes, setLikes] = useState(post.likes || []);
   const [comments, setComments] = useState(post.comments || []);
   const [commentInput, setCommentInput] = useState('');
@@ -111,12 +113,24 @@ export default function PostCard({ post, currentUserId }) {
           onClick={handleDoubleTap}
           className="relative w-full aspect-square bg-neutral-950 flex items-center justify-center cursor-pointer overflow-hidden"
         >
-          <img
-            src={post.imageUrl}
-            alt={post.caption || 'Post image'}
-            className="w-full h-full object-cover pointer-events-none"
-            loading="lazy"
-          />
+          {isVideoPost ? (
+            <video
+              src={mediaUrl}
+              aria-label={post.caption || 'Post video'}
+              controls
+              playsInline
+              preload="metadata"
+              onClick={(event) => event.stopPropagation()}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={mediaUrl}
+              alt={post.caption || 'Post image'}
+              className="w-full h-full object-cover pointer-events-none"
+              loading="lazy"
+            />
+          )}
 
           {showHeartOverlay && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">

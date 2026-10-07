@@ -15,13 +15,17 @@ const notifyPostOwner = async (post, actorId, type) => {
 export const createPost = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'Please upload an image' });
+      return res.status(400).json({ message: 'Please upload an image or video' });
     }
+    const mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
+    const mediaUrl = req.file.path.startsWith('http')
+      ? req.file.path
+      : `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     const newPost = new Post({
       caption: req.body.caption || '',
-      imageUrl: req.file.path.startsWith('http')
-        ? req.file.path
-        : `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`,
+      mediaUrl,
+      mediaType,
+      ...(mediaType === 'video' ? { videoUrl: mediaUrl } : { imageUrl: mediaUrl }),
       user: req.user._id,
     });
     const savedPost = await newPost.save();

@@ -3,7 +3,10 @@ import mongoose from 'mongoose';
 const postSchema = new mongoose.Schema(
   {
     caption: { type: String, trim: true, default: '' },
-    imageUrl: { type: String, required: true },
+    mediaUrl: { type: String },
+    mediaType: { type: String, enum: ['image', 'video'], default: 'image' },
+    imageUrl: { type: String },
+    videoUrl: { type: String },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     comments: [

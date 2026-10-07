@@ -4,7 +4,6 @@ import Sidebar from '../components/Sidebar';
 import BottomNav from '../components/BottomNav';
 import Avatar from '../components/Avatar';
 import API from '../api/axios';
-import { reelSamples } from '../data/reelSamples';
 
 function ReelItem({ reel }) {
   const videoRef = useRef(null);
@@ -43,7 +42,7 @@ function ReelItem({ reel }) {
     <article className="relative mx-auto flex h-full w-full max-w-[470px] snap-start items-center justify-center overflow-hidden bg-black text-white md:my-4 md:h-[calc(100%-2rem)] md:rounded-2xl">
       <video
         ref={videoRef}
-        src={reel.videoUrl || reel.imageUrl}
+        src={reel.videoUrl || reel.mediaUrl || reel.imageUrl}
         poster={reel.thumbnailUrl}
         muted={muted}
         loop
@@ -85,8 +84,8 @@ export default function Reels() {
       .then(({ data }) => {
         const videoPosts = data
           .filter((post) => post.mediaType === 'video' || post.videoUrl)
-          .map((post) => ({ ...post, videoUrl: post.videoUrl || post.imageUrl }));
-        setReels(videoPosts.length ? videoPosts : import.meta.env.DEV ? reelSamples : []);
+          .map((post) => ({ ...post, videoUrl: post.videoUrl || post.mediaUrl || post.imageUrl }));
+        setReels(videoPosts);
       })
       .catch((requestError) => {
         setError(requestError.response?.data?.message || 'Could not load reels.');
