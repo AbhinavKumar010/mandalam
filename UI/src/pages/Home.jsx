@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './Home.css';
 import Sidebar from '../components/Sidebar';
 import MobileHeader from '../components/MobileHeader';
 import BottomNav from '../components/BottomNav';
@@ -32,31 +33,31 @@ export default function Home() {
   }, [reloadKey]);
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-black text-black dark:text-white">
+    <div className="home-page">
       {/* Mobile Top Header */}
       <MobileHeader />
 
-      <div className="flex">
+      <div className="home-page__layout">
         {/* Desktop Sidebar */}
         <Sidebar onOpenCreateModal={() => setIsModalOpen(true)} />
 
         {/* Main Content Area */}
-        <main className="flex-1 flex justify-center py-2 md:py-6 px-0 md:px-4 pb-16 md:pb-6">
-          <div className="w-full max-w-[470px]">
+        <main className="home-page__main">
+          <div className="home-page__column">
             <StoryTray />
             {/* Posts Stream */}
-            <div className="flex flex-col gap-3 md:gap-4">
-              {loading && <p className="py-12 text-center text-sm text-neutral-500">Loading your feed...</p>}
+            <div className="home-page__stream">
+              {loading && <p className="home-page__state">Loading your feed...</p>}
               {!loading && loadError && (
-                <div className="py-12 text-center">
-                  <p role="alert" className="text-sm text-neutral-500">{loadError}</p>
-                  <button onClick={() => setReloadKey((key) => key + 1)} className="mt-3 text-sm font-semibold text-blue-500">Try again</button>
+                <div className="home-page__state">
+                  <p role="alert">{loadError}</p>
+                  <button onClick={() => setReloadKey((key) => key + 1)} className="home-page__action">Try again</button>
                 </div>
               )}
               {!loading && !loadError && posts.length === 0 && (
-                <div className="py-12 text-center">
-                  <p className="text-sm text-neutral-500">No posts yet. Share the first photo.</p>
-                  <button onClick={() => setIsModalOpen(true)} className="mt-3 text-sm font-semibold text-blue-500">Create a post</button>
+                <div className="home-page__state">
+                  <p>No posts yet. Share the first photo.</p>
+                  <button onClick={() => setIsModalOpen(true)} className="home-page__action">Create a post</button>
                 </div>
               )}
               {!loading && !loadError && posts.map((post) => (

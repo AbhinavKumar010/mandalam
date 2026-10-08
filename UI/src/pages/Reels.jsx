@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import './Reels.css';
 import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import BottomNav from '../components/BottomNav';
@@ -39,7 +40,7 @@ function ReelItem({ reel }) {
   };
 
   return (
-    <article className="relative mx-auto flex h-full w-full max-w-[470px] snap-start items-center justify-center overflow-hidden bg-black text-white md:my-4 md:h-[calc(100%-2rem)] md:rounded-2xl">
+    <article className="reel-item">
       <video
         ref={videoRef}
         src={reel.videoUrl || reel.mediaUrl || reel.imageUrl}
@@ -52,21 +53,21 @@ function ReelItem({ reel }) {
         onClick={togglePlayback}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        className="h-full w-full object-cover"
+        className="reel-item__video"
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent p-5 pt-24">
-        <div className="flex items-center gap-2">
-          <Avatar src={reel.user?.profilePic} name={reel.user?.username || reel.username} className="h-9 w-9 border border-white/60 bg-neutral-800 text-white" />
-          <span className="text-sm font-semibold">{reel.user?.username || reel.username || 'Creator'}</span>
-          {reel.isDemo && <span className="rounded bg-white/15 px-2 py-1 text-[10px] uppercase">Sample</span>}
+      <div className="reel-item__caption">
+        <div className="reel-item__creator">
+          <Avatar src={reel.user?.profilePic} name={reel.user?.username || reel.username} className="reel-item__avatar" />
+          <span className="reel-item__username">{reel.user?.username || reel.username || 'Creator'}</span>
+          {reel.isDemo && <span className="reel-item__sample">Sample</span>}
         </div>
-        {reel.caption && <p className="mt-2 max-w-[34ch] text-sm">{reel.caption}</p>}
+        {reel.caption && <p className="reel-item__text">{reel.caption}</p>}
       </div>
-      <div className="absolute bottom-5 right-4 flex flex-col gap-3">
-        <button type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Unmute reel' : 'Mute reel'} className="rounded-full bg-black/45 p-3 text-white backdrop-blur">
+      <div className="reel-item__controls">
+        <button type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Unmute reel' : 'Mute reel'} className="reel-item__control">
           {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </button>
-        <button type="button" onClick={togglePlayback} aria-label={playing ? 'Pause reel' : 'Play reel'} className="rounded-full bg-black/45 p-3 text-white backdrop-blur">
+        <button type="button" onClick={togglePlayback} aria-label={playing ? 'Pause reel' : 'Play reel'} className="reel-item__control">
           {playing ? <Pause size={20} /> : <Play size={20} />}
         </button>
       </div>
@@ -94,13 +95,13 @@ export default function Reels() {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-neutral-950 text-white">
+    <div className="reels-page">
       <Sidebar />
-      <main aria-label="Reels" className="min-h-0 flex-1 snap-y snap-mandatory overflow-y-auto scroll-smooth pb-12 md:pb-0">
-        {loading && <p className="flex h-full items-center justify-center text-sm text-neutral-400">Loading reels...</p>}
-        {!loading && error && <p role="alert" className="flex h-full items-center justify-center px-5 text-center text-sm text-red-300">{error}</p>}
-        {!loading && !error && reels.length === 0 && <p className="flex h-full items-center justify-center px-5 text-center text-sm text-neutral-400">No video reels yet.</p>}
-        {!loading && !error && reels.map((reel) => <section key={reel._id || reel.id} className="h-[calc(100dvh-3rem)] snap-start md:h-screen"><ReelItem reel={reel} /></section>)}
+      <main aria-label="Reels" className="reels-page__main">
+        {loading && <p className="reels-page__state">Loading reels...</p>}
+        {!loading && error && <p role="alert" className="reels-page__state reels-page__state--error">{error}</p>}
+        {!loading && !error && reels.length === 0 && <p className="reels-page__state">No video reels yet.</p>}
+        {!loading && !error && reels.map((reel) => <section key={reel._id || reel.id} className="reels-page__section"><ReelItem reel={reel} /></section>)}
       </main>
       <BottomNav />
     </div>

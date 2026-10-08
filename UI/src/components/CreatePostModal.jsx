@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import './CreatePostModal.css';
 import { Camera, Image as ImageIcon, Square, Video, X } from 'lucide-react';
 import API from '../api/axios';
 
@@ -187,28 +188,28 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-neutral-900 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl relative">
-        <div className="flex justify-between items-center px-4 py-3 border-b border-neutral-200 dark:border-neutral-800">
-          <h3 className="font-semibold text-center w-full">Create new post</h3>
-          <button onClick={closeModal} aria-label="Close post composer" className="absolute right-4 text-neutral-400 hover:text-black dark:hover:text-white">
+    <div className="create-post-overlay">
+      <div className="create-post-dialog">
+        <div className="create-post__header">
+          <h3 className="create-post__title">Create new post</h3>
+          <button onClick={closeModal} aria-label="Close post composer" className="create-post__close">
             <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-4">
-          {error && <p role="alert" className="text-xs text-red-500">{error}</p>}
-          <div className="flex gap-2">
-            <label className={`flex flex-1 items-center justify-center gap-2 border border-neutral-300 dark:border-neutral-700 rounded-lg px-3 py-2 text-sm font-medium cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800 ${isRecording ? 'pointer-events-none opacity-50' : ''}`}>
+        <form onSubmit={handleSubmit} className="create-post__form">
+          {error && <p role="alert" className="create-post__error">{error}</p>}
+          <div className="create-post__actions">
+            <label className={`create-post__media-button ${isRecording ? 'create-post__media-button--disabled' : ''}`}>
               <ImageIcon size={17} />
               <span>Upload media</span>
-              <input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" onChange={handleMediaChange} disabled={isRecording} className="hidden" />
+              <input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" onChange={handleMediaChange} disabled={isRecording} className="create-post__file-input" />
             </label>
             <button
               type="button"
               onClick={cameraActive ? stopCamera : startCamera}
               disabled={isRecording}
-              className="flex flex-1 items-center justify-center gap-2 border border-neutral-300 dark:border-neutral-700 rounded-lg px-3 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-50"
+              className="create-post__media-button"
             >
               <Camera size={17} />
               <span>{cameraActive ? 'Close camera' : 'Record video'}</span>
@@ -216,39 +217,39 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated }) {
           </div>
 
           {cameraActive ? (
-            <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-black">
-              <video ref={cameraVideoRef} autoPlay muted playsInline className="h-full w-full object-cover" />
-              <div className="absolute inset-x-0 bottom-0 flex justify-center bg-black/60 p-3">
+            <div className="create-post__camera-preview">
+              <video ref={cameraVideoRef} autoPlay muted playsInline className="create-post__camera-feed" />
+              <div className="create-post__record-bar">
                 <button
                   type="button"
                   onClick={isRecording ? stopRecording : startRecording}
-                  className="flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-neutral-900"
+                  className="create-post__record-button"
                 >
-                  {isRecording ? <Square size={15} className="fill-red-500 text-red-500" /> : <Video size={17} />}
+                  {isRecording ? <Square size={15} className="create-post__recording-icon" /> : <Video size={17} />}
                   {isRecording ? 'Stop recording' : 'Start recording'}
                 </button>
               </div>
             </div>
           ) : preview ? (
-            <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-black flex items-center justify-center">
+            <div className="create-post__preview">
               {file.type.startsWith('video/') ? (
-                <video src={preview} controls playsInline className="h-full w-full object-contain" />
+                <video src={preview} controls playsInline className="create-post__preview-media" />
               ) : (
-                <img src={preview} alt="Post preview" className="h-full w-full object-cover" />
+                <img src={preview} alt="Post preview" className="create-post__preview-media" />
               )}
               <button
                 type="button"
                 onClick={() => { setFile(null); setPreview(null); }}
                 aria-label="Remove selected media"
-                className="absolute right-2 top-2 rounded-full bg-black/60 p-1.5 text-white"
+                className="create-post__remove"
               >
                 <X size={16} />
               </button>
             </div>
           ) : (
-            <div className="flex h-48 flex-col items-center justify-center rounded-lg border-2 border-dashed border-neutral-300 text-neutral-400 dark:border-neutral-700">
-              <ImageIcon size={38} className="mb-2" />
-              <span className="text-sm">Choose a photo or video, or record one</span>
+            <div className="create-post__empty">
+              <ImageIcon size={38} />
+              <span>Choose a photo or video, or record one</span>
             </div>
           )}
 
@@ -256,13 +257,13 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated }) {
             placeholder="Write a caption..."
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            className="w-full bg-transparent border border-neutral-200 dark:border-neutral-700 rounded-lg p-2.5 text-sm outline-none resize-none h-20"
+            className="create-post__caption"
           />
 
           <button
             type="submit"
             disabled={!file || loading}
-            className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-medium py-2 rounded-lg text-sm transition-colors"
+            className="create-post__submit"
           >
             {loading ? 'Sharing...' : 'Share'}
           </button>

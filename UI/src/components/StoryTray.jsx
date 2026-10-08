@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import './StoryTray.css';
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
 import API from '../api/axios';
 import Avatar from './Avatar';
@@ -93,30 +94,30 @@ export default function StoryTray() {
 
   return (
     <>
-      <section aria-label="Stories" className="mb-4 border-y border-neutral-200 bg-white px-3 py-4 dark:border-neutral-800 dark:bg-neutral-950 md:rounded-xl md:border">
-        <div className="flex items-start gap-4 overflow-x-auto pb-1">
-          <div className="relative flex w-[68px] shrink-0 flex-col items-center gap-1.5">
+      <section aria-label="Stories" className="story-tray">
+        <div className="story-tray__list">
+          <div className="story-person">
             <button
               type="button"
               onClick={() => ownStories.length && openStories(ownStories)}
-              className="flex flex-col items-center gap-1.5"
+              className="story-person__open"
               aria-label={ownStories.length ? 'View your story' : 'Add a story'}
             >
-              <span className={`rounded-full p-[2px] ${ownStories.length ? 'bg-gradient-to-tr from-amber-400 via-rose-500 to-fuchsia-600' : 'bg-neutral-200 dark:bg-neutral-700'}`}>
+              <span className={`story-ring ${ownStories.length ? 'story-ring--active' : ''}`}>
                 <Avatar
                   src={currentUser?.profilePic}
                   name={currentUser?.username}
-                  className="h-14 w-14 border-2 border-white dark:border-neutral-950"
+                  className="story-avatar"
                 />
               </span>
-              <span className="max-w-[68px] truncate text-[11px] text-neutral-500">Your story</span>
+              <span className="story-person__name">Your story</span>
             </button>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
               aria-label="Add to your story"
-              className="absolute right-0 top-9 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-500 text-white dark:border-neutral-950"
+              className="story-add"
             >
               <Plus size={12} />
             </button>
@@ -127,63 +128,63 @@ export default function StoryTray() {
               key={group.user?._id}
               type="button"
               onClick={() => openStories(group.items)}
-              className="flex w-[68px] shrink-0 flex-col items-center gap-1.5"
+              className="story-person__open story-person"
               aria-label={`View ${group.user?.username}'s story`}
             >
-              <span className="rounded-full bg-gradient-to-tr from-amber-400 via-rose-500 to-fuchsia-600 p-[2px]">
+              <span className="story-ring story-ring--active">
                 <Avatar
                   src={group.user?.profilePic}
                   name={group.user?.username}
-                  className="h-14 w-14 border-2 border-white dark:border-neutral-950"
+                  className="story-avatar"
                 />
               </span>
-              <span className="max-w-[68px] truncate text-[11px] text-neutral-600 dark:text-neutral-300">
+              <span className="story-person__name">
                 {group.user?.username}
               </span>
             </button>
           ))}
-          {uploading && <span className="self-center text-xs text-neutral-500">Uploading story...</span>}
+          {uploading && <span className="story-upload-status">Uploading story...</span>}
         </div>
         <input
           ref={fileInputRef}
           type="file"
           accept="image/jpeg,image/png,image/webp"
           onChange={handleUpload}
-          className="hidden"
+          className="story-file-input"
         />
-        {error && <p role="alert" className="mt-2 text-xs text-red-500">{error}</p>}
+        {error && <p role="alert" className="story-error">{error}</p>}
       </section>
 
       {activeStory && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 p-3"
+          className="story-viewer"
           role="dialog"
           aria-modal="true"
           aria-label={`${activeStory.user?.username || 'User'}'s story`}
         >
-          <div className="relative flex h-[min(90dvh,760px)] w-full max-w-[430px] items-center justify-center overflow-hidden rounded-xl bg-neutral-900">
-            <div className="absolute inset-x-3 top-3 z-10 flex gap-1">
+          <div className="story-viewer__frame">
+            <div className="story-viewer__progress">
               {selectedStories.map((story, index) => (
                 <span
                   key={story._id}
-                  className={`h-1 flex-1 rounded-full ${index <= selectedIndex ? 'bg-white' : 'bg-white/35'}`}
+                  className={`story-viewer__progress-item ${index <= selectedIndex ? 'story-viewer__progress-item--seen' : ''}`}
                 />
               ))}
             </div>
-            <div className="absolute inset-x-3 top-7 z-10 flex items-center justify-between text-white">
-              <div className="flex items-center gap-2">
+            <div className="story-viewer__header">
+              <div className="story-viewer__user">
                 <Avatar
                   src={activeStory.user?.profilePic}
                   name={activeStory.user?.username}
-                  className="h-8 w-8 bg-neutral-700 text-xs text-white"
+                  className="story-viewer__user-avatar"
                 />
-                <span className="text-sm font-semibold">{activeStory.user?.username}</span>
+                <span className="story-viewer__username">{activeStory.user?.username}</span>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedStories(null)}
                 aria-label="Close story"
-                className="p-1"
+                className="story-viewer__close"
               >
                 <X size={22} />
               </button>
@@ -191,14 +192,14 @@ export default function StoryTray() {
             <img
               src={activeStory.imageUrl}
               alt={`${activeStory.user?.username || 'User'}'s story`}
-              className="max-h-full max-w-full object-contain"
+              className="story-viewer__image"
             />
             <button
               type="button"
               onClick={() => advanceStory(-1)}
               aria-label="Previous story"
               disabled={selectedIndex === 0}
-              className="absolute inset-y-16 left-0 flex w-1/3 items-center justify-start pl-3 text-white disabled:opacity-0"
+              className="story-viewer__nav story-viewer__nav--previous"
             >
               <ChevronLeft size={28} />
             </button>
@@ -206,7 +207,7 @@ export default function StoryTray() {
               type="button"
               onClick={() => advanceStory(1)}
               aria-label="Next story"
-              className="absolute inset-y-16 right-0 flex w-1/3 items-center justify-end pr-3 text-white"
+              className="story-viewer__nav story-viewer__nav--next"
             >
               <ChevronRight size={28} />
             </button>

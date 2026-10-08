@@ -1,0 +1,15 @@
+.register-page { display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 1rem; background: #f5f7f4; }
+.dark .register-page { background: #000; }
+.register-page__card { width: 100%; max-width: 24rem; padding: 2rem; border: 1px solid #e0e6df; border-radius: .5rem; background: #fff; box-shadow: 0 1px 3px #00000012; }
+.dark .register-page__card { border-color: #262626; background: #171717; }
+.register-page__brand { margin-bottom: 1rem; text-align: center; font-family: Georgia, 'Times New Roman', serif; font-size: 1.875rem; font-weight: 700; }
+.register-page__intro, .register-page__footer { color: #748078; text-align: center; font-size: .75rem; }
+.register-page__intro { margin-bottom: 1.5rem; font-weight: 500; }
+.register-page__error { margin-bottom: 1rem; color: #dc2626; text-align: center; font-size: .75rem; }
+.register-page__form { display: flex; flex-direction: column; gap: .75rem; }
+.register-page__input { width: 100%; padding: .5rem .75rem; border: 1px solid #d4d4d4; border-radius: .25rem; background: #f5f7f4; font-size: .875rem; }
+.dark .register-page__input { border-color: #404040; background: #262626; color: #fff; }
+.register-page__submit { margin-top: .5rem; border-radius: .25rem; font-size: .875rem; }
+.register-page__footer { margin-top: 1.5rem; }
+.register-page__link { color: #c94c36; font-weight: 600; }
+.register-page__link:hover { text-decoration: underline; }

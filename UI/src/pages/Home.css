@@ -1,0 +1,12 @@
+.home-page { min-height: 100vh; background: #f5f7f4; color: #000; }
+.dark .home-page { background: #000; color: #fff; }
+.home-page__layout { display: flex; }
+.home-page__main { display: flex; flex: 1; justify-content: center; padding: .5rem 0 4rem; }
+.home-page__column { width: 100%; max-width: 470px; }
+.home-page__stream { display: flex; flex-direction: column; gap: .75rem; }
+.home-page__state { padding: 3rem 0; color: #748078; text-align: center; font-size: .875rem; }
+.home-page__action { margin-top: .75rem; color: #c94c36; font-size: .875rem; font-weight: 600; }
+@media (min-width: 768px) {
+  .home-page__main { padding: 1.5rem 1rem .5rem; }
+  .home-page__stream { gap: 1rem; }
+}

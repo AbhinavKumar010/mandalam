@@ -1,19 +1,20 @@
 import React from 'react';
+import './MobileHeader.css';
 import { Search, MessageCircle, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function MobileHeader() {
   return (
-    <header className="md:hidden sticky top-0 z-40 bg-white dark:bg-black border-b border-neutral-200 dark:border-neutral-800 px-4 h-12 flex items-center justify-between">
-      <h1 className="text-xl font-bold font-serif tracking-tight">Chalchitra</h1>
-      <div className="flex items-center gap-4">
-        <Link to="/explore" aria-label="Explore" className="text-neutral-800 dark:text-neutral-200">
+    <header className="mobile-header">
+      <h1 className="mobile-header__brand">Chalchitra</h1>
+      <div className="mobile-header__actions">
+        <Link to="/explore" aria-label="Explore" className="mobile-header__link">
           <Search size={22} />
         </Link>
-        <Link to="/notifications" aria-label="Notifications" className="text-neutral-800 dark:text-neutral-200">
+        <Link to="/notifications" aria-label="Notifications" className="mobile-header__link">
           <Bell size={22} />
         </Link>
-        <Link to="/messages" className="text-neutral-800 dark:text-neutral-200">
+        <Link to="/messages" className="mobile-header__link">
           <MessageCircle size={22} />
         </Link>
       </div>

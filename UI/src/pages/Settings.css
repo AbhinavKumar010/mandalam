@@ -1,0 +1,51 @@
+.settings-page { min-height: 100vh; background: #f5f7f4; color: #171717; }
+.dark .settings-page { background: #000; color: #fff; }
+.settings-page__layout { display: flex; }
+.settings-page__content { width: 100%; max-width: 920px; flex: 1; margin: 0 auto; padding: 1.25rem 1rem 5rem; }
+.settings-page__back { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1.25rem; color: #748078; font-size: .875rem; }
+.settings-page__back:hover { color: #202b25; }
+.dark .settings-page__back:hover { color: #fff; }
+.settings-page__title { margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600; }
+.settings-page__grid { display: grid; gap: 1.75rem; }
+.settings-page__nav { display: flex; gap: .5rem; overflow-x: auto; }
+.settings-page__nav-item { display: flex; flex: 0 0 auto; align-items: center; gap: .75rem; padding: .625rem .75rem; border-radius: .5rem; text-align: left; font-size: .875rem; white-space: nowrap; }
+.settings-page__nav-item:hover { background: #eef1ed; }
+.dark .settings-page__nav-item:hover { background: #171717; }
+.settings-page__nav-item--active { background: #e7ebe6; font-weight: 600; }
+.dark .settings-page__nav-item--active { background: #262626; }
+.settings-page__section { min-width: 0; padding-top: 1.25rem; border-top: 1px solid #e0e6df; }
+.dark .settings-page__section { border-color: #262626; }
+.settings-page__section-title { margin-bottom: .5rem; font-size: 1.125rem; font-weight: 600; }
+.settings-page__privacy-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #e0e6df; }
+.dark .settings-page__privacy-row, .settings-page__person-row, .settings-page__person-button { border-color: #262626; }
+.settings-page__privacy-label { font-size: .875rem; font-weight: 500; }
+.settings-page__description, .settings-page__helper { margin-top: .25rem; color: #748078; font-size: .75rem; }
+.settings-page__switch { position: relative; width: 2.75rem; height: 1.5rem; flex: 0 0 auto; border-radius: 999px; background: #d4d4d4; transition: background 160ms ease; }
+.settings-page__switch--on { background: #059669; }
+.settings-page__switch-thumb { position: absolute; top: .25rem; left: .25rem; width: 1rem; height: 1rem; border-radius: 50%; background: #fff; transition: transform 160ms ease; }
+.settings-page__switch--on .settings-page__switch-thumb { transform: translateX(1.5rem); }
+.settings-page__helper { margin-bottom: 1rem; }
+.settings-page__empty-row { padding: 1rem 0; border-bottom: 1px solid #e0e6df; color: #748078; font-size: .875rem; }
+.settings-page__person-row, .settings-page__person-button { display: flex; width: 100%; align-items: center; gap: .75rem; padding: .75rem 0; border-bottom: 1px solid #e0e6df; text-align: left; }
+.settings-page__person-button:hover { background: #eef1ed; }
+.dark .settings-page__person-button:hover { background: #171717; }
+.settings-page__person-avatar { width: 2.25rem; height: 2.25rem; }
+.settings-page__person-name { min-width: 0; flex: 1; overflow: hidden; font-size: .875rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.settings-page__person-details { display: flex; min-width: 0; flex: 1; flex-direction: column; }
+.settings-page__person-full-name { overflow: hidden; color: #748078; font-size: .75rem; text-overflow: ellipsis; white-space: nowrap; }
+.settings-page__person-action { color: #c94c36; font-size: .75rem; font-weight: 600; }
+.settings-page__remove { color: #c94c36; font-size: .75rem; font-weight: 600; }
+.settings-page__remove:disabled, .settings-page__person-button:disabled { opacity: .5; }
+.settings-page__search { position: relative; margin: 1rem 0; }
+.settings-page__search-icon { position: absolute; top: 50%; left: .75rem; color: #a3a3a3; transform: translateY(-50%); }
+.settings-page__search-input { width: 100%; padding: .5rem .75rem .5rem 2.25rem; border: 0; border-radius: .5rem; background: #eef1ed; font-size: .875rem; outline: none; }
+.dark .settings-page__search-input { background: #171717; color: #fff; }
+.settings-page__state { padding: .75rem 0; color: #748078; font-size: .875rem; }
+.settings-page__state--error { margin-top: 1rem; color: #dc2626; }
+@media (min-width: 768px) {
+  .settings-page__content { padding: 2.5rem 2rem; }
+  .settings-page__grid { grid-template-columns: 220px minmax(0, 1fr); }
+  .settings-page__nav { flex-direction: column; overflow: visible; }
+  .settings-page__section { padding-top: 0; padding-left: 1.75rem; border-top: 0; border-left: 1px solid #e0e6df; }
+  .dark .settings-page__section { border-color: #262626; }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './DirectChat.css';
 import { Smile, Info, ArrowLeft, Search, Check, CheckCheck } from 'lucide-react';
 import io from 'socket.io-client';
 import Sidebar from '../components/Sidebar';
@@ -189,36 +190,33 @@ export default function DirectChat() {
   );
 
   return (
-    <div className="flex h-[calc(100dvh-3rem)] bg-white dark:bg-black text-black dark:text-white overflow-hidden md:h-screen">
+    <div className="direct-chat-page">
       <Sidebar />
 
-      <div className="flex-1 flex max-w-[975px] mx-auto md:my-4 md:border md:border-neutral-200 md:dark:border-neutral-800 md:rounded-xl overflow-hidden shadow-sm h-full md:h-[calc(100vh-2rem)]">
+      <div className="chat-shell">
         {/* Left: Contact List */}
         <div
-          className={`w-full md:w-80 border-r border-neutral-200 dark:border-neutral-800 flex flex-col bg-white dark:bg-black ${
-            mobileShowChat ? 'hidden md:flex' : 'flex'
-          }`}
+          className={`chat-shell__contacts ${mobileShowChat ? 'chat-shell__contacts--hidden-mobile' : ''}`}
         >
-          <div className="p-4 border-b border-neutral-200 dark:border-neutral-800">
-            <h2 className="font-bold text-base tracking-tight">{currentUser.username || 'Chats'}</h2>
+          <div className="chat-contacts__heading">
+            <h2 className="chat-contacts__title">{currentUser.username || 'Chats'}</h2>
           </div>
 
-          <div className="p-3 border-b border-neutral-100 dark:border-neutral-900">
-            <div className="flex items-center gap-2 bg-neutral-100 dark:bg-neutral-900 px-3 py-1.5 rounded-lg">
-              <Search size={16} className="text-neutral-400" />
+          <div className="chat-contacts__search-wrap">
+            <div className="chat-contacts__search">
+              <Search size={16} />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent text-xs outline-none w-full placeholder-neutral-500 text-neutral-900 dark:text-white"
               />
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="chat-contacts__list">
             {filteredUsers.length === 0 ? (
-              <p className="text-xs text-center text-neutral-400 p-4">No users found</p>
+              <p className="chat-contacts__empty">No users found</p>
             ) : (
               filteredUsers.map((user) => {
                 const isSelected = activeChat?._id === user._id;
@@ -230,16 +228,12 @@ export default function DirectChat() {
                       setIsOtherTyping(false);
                       setMobileShowChat(true);
                     }}
-                    className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
-                      isSelected
-                        ? 'bg-neutral-100 dark:bg-neutral-900'
-                        : 'hover:bg-neutral-50 dark:hover:bg-neutral-900/50'
-                    }`}
+                    className={`chat-contact ${isSelected ? 'chat-contact--selected' : ''}`}
                   >
-                    <Avatar src={user.profilePic} name={user.username} alt={user.username} className="h-12 w-12 border border-neutral-200 dark:border-neutral-800" />
-                    <div className="flex flex-col flex-1 min-w-0">
-                      <span className="text-sm font-semibold truncate">{user.username}</span>
-                      <span className="text-xs text-neutral-500 truncate">{user.fullName || 'Member'}</span>
+                    <Avatar src={user.profilePic} name={user.username} alt={user.username} className="chat-contact__avatar" />
+                    <div className="chat-contact__details">
+                      <span className="chat-contact__username">{user.username}</span>
+                      <span className="chat-contact__name">{user.fullName || 'Member'}</span>
                     </div>
                   </div>
                 );
@@ -250,47 +244,45 @@ export default function DirectChat() {
 
         {/* Right: Message Window */}
         <div
-          className={`flex-1 flex flex-col justify-between bg-neutral-50 dark:bg-neutral-950 ${
-            !mobileShowChat ? 'hidden md:flex' : 'flex'
-          }`}
+          className={`chat-conversation ${!mobileShowChat ? 'chat-conversation--hidden-mobile' : ''}`}
         >
           {activeChat ? (
             <>
               {/* Top Banner */}
-              <div className="p-3.5 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div className="chat-conversation__header">
+                <div className="chat-conversation__identity">
                   <button
                     onClick={() => setMobileShowChat(false)}
-                    className="md:hidden text-neutral-600 dark:text-neutral-300 mr-1"
+                    className="chat-conversation__back"
                   >
                     <ArrowLeft size={20} />
                   </button>
-                  <Avatar src={activeChat.profilePic} name={activeChat.username} alt={activeChat.username} className="h-9 w-9" />
-                  <div>
-                    <span className="font-semibold text-xs block">{activeChat.username}</span>
-                    <span className="text-[10px] text-neutral-400">
+                  <Avatar src={activeChat.profilePic} name={activeChat.username} alt={activeChat.username} className="chat-conversation__avatar" />
+                  <div className="chat-conversation__user">
+                    <span className="chat-conversation__username">{activeChat.username}</span>
+                    <span className="chat-conversation__status">
                       {isOtherTyping ? (
-                        <span className="text-blue-500 font-medium">typing...</span>
+                        <span className="chat-conversation__typing-label">typing...</span>
                       ) : (
                         activeChat.fullName
                       )}
                     </span>
                   </div>
                 </div>
-                <Info size={18} className="text-neutral-500 cursor-pointer" />
+                <Info size={18} className="chat-conversation__info" />
               </div>
 
               {/* Chat Thread */}
-              <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-2.5">
+              <div className="chat-thread">
                 {loadingHistory ? (
-                  <div className="flex-1 flex items-center justify-center text-xs text-neutral-400">
+                  <div className="chat-thread__loading">
                     Loading conversation...
                   </div>
                 ) : messages.length === 0 ? (
-                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-neutral-400">
-                    <Avatar src={activeChat.profilePic} name={activeChat.username} alt={activeChat.username} className="mb-2 h-16 w-16 text-lg" />
-                    <h4 className="font-bold text-sm text-neutral-900 dark:text-neutral-100">{activeChat.fullName}</h4>
-                    <p className="text-xs text-neutral-500 mt-1">Send a message to start chatting.</p>
+                  <div className="chat-thread__empty">
+                    <Avatar src={activeChat.profilePic} name={activeChat.username} alt={activeChat.username} className="chat-thread__empty-avatar" />
+                    <h4 className="chat-thread__empty-title">{activeChat.fullName}</h4>
+                    <p className="chat-thread__empty-copy">Send a message to start chatting.</p>
                   </div>
                 ) : (
                   messages.map((m) => {
@@ -302,29 +294,25 @@ export default function DirectChat() {
                     return (
                       <div
                         key={m._id}
-                        className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
+                        className={`chat-message ${isMe ? 'chat-message--outgoing' : 'chat-message--incoming'}`}
                       >
                         <div
-                          className={`max-w-[75%] md:max-w-sm px-4 py-2 rounded-2xl text-xs break-words shadow-sm ${
-                            isMe
-                              ? 'bg-blue-500 text-white rounded-br-sm'
-                              : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-bl-sm'
-                          }`}
+                          className="chat-message__bubble"
                         >
                           {m.text}
                         </div>
 
                         {/* Timestamp & Read Receipt */}
-                        <div className="flex items-center gap-1 mt-0.5 px-1">
+                        <div className="chat-message__meta">
                           {timeFormatted && (
-                            <span className="text-[9px] text-neutral-400">{timeFormatted}</span>
+                            <span className="chat-message__time">{timeFormatted}</span>
                           )}
                           {isMe && (
                             <span>
                               {m.read ? (
-                                <CheckCheck size={12} className="text-blue-500" title="Read" />
+                                <CheckCheck size={12} className="chat-message__receipt--read" title="Read" />
                               ) : (
-                                <Check size={12} className="text-neutral-400" title="Delivered" />
+                                <Check size={12} className="chat-message__receipt--delivered" title="Delivered" />
                               )}
                             </span>
                           )}
@@ -336,10 +324,10 @@ export default function DirectChat() {
 
                 {/* Animated Typing Bubble */}
                 {isOtherTyping && (
-                  <div className="flex items-center gap-1.5 bg-neutral-200 dark:bg-neutral-800 px-3 py-2 rounded-2xl w-14 rounded-bl-none self-start mt-1">
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" />
+                  <div className="chat-typing">
+                    <span className="chat-typing__dot" />
+                    <span className="chat-typing__dot" />
+                    <span className="chat-typing__dot" />
                   </div>
                 )}
 
@@ -349,25 +337,24 @@ export default function DirectChat() {
               {/* Composer */}
               <form
                 onSubmit={handleSendMessage}
-                className="p-3 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 flex items-center gap-2.5"
+                className="chat-composer"
               >
-                <Smile size={20} className="text-neutral-400 cursor-pointer" />
+                <Smile size={20} />
                 <input
                   type="text"
                   placeholder="Message..."
                   value={input}
                   onChange={handleInputChange}
-                  className="flex-1 bg-transparent text-xs outline-none placeholder-neutral-500 text-neutral-900 dark:text-white"
                 />
                 {input.trim() && (
-                  <button type="submit" className="text-xs font-semibold text-blue-500 hover:text-blue-700">
+                  <button type="submit" className="chat-composer__send">
                     Send
                   </button>
                 )}
               </form>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-xs text-neutral-400">
+            <div className="chat-conversation__prompt">
               Select a conversation to start messaging
             </div>
           )}

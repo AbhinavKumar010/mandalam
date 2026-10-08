@@ -1,0 +1,42 @@
+.mobile-header {
+  position: sticky;
+  z-index: 40;
+  top: 0;
+  display: none;
+  height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid #e0e6df;
+  background: #fff;
+}
+
+.dark .mobile-header {
+  border-color: #262626;
+  background: #000;
+}
+
+.mobile-header__brand {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.mobile-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-header__link {
+  display: inline-flex;
+  color: #344239;
+}
+
+.dark .mobile-header__link {
+  color: #e5e5e5;
+}
+
+@media (max-width: 767px) {
+  .mobile-header { display: flex; }
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './Settings.css';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Search, Shield, Users, UserRoundX, Heart, Star, VolumeX } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
@@ -87,68 +88,68 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-950 dark:bg-black dark:text-white">
+    <div className="settings-page">
       <MobileHeader />
-      <div className="flex">
+      <div className="settings-page__layout">
         <Sidebar />
-        <main className="mx-auto w-full max-w-[920px] flex-1 px-4 py-5 pb-20 md:px-8 md:py-10">
-          <Link to="/profile" className="mb-5 inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white">
+        <main className="settings-page__content">
+          <Link to="/profile" className="settings-page__back">
             <ArrowLeft size={17} /> Profile
           </Link>
-          <h1 className="mb-6 text-2xl font-semibold">Settings</h1>
-          <div className="grid gap-7 md:grid-cols-[220px_minmax(0,1fr)]">
-            <nav aria-label="Settings sections" className="flex gap-2 overflow-x-auto md:flex-col">
+          <h1 className="settings-page__title">Settings</h1>
+          <div className="settings-page__grid">
+            <nav aria-label="Settings sections" className="settings-page__nav">
               {sections.map(({ key, label, icon: Icon }) => (
-                <button key={key} type="button" onClick={() => setSearchParams({ section: key })} className={`flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm ${section.key === key ? 'bg-neutral-200 font-semibold dark:bg-neutral-800' : 'hover:bg-neutral-100 dark:hover:bg-neutral-900'}`}>
+                <button key={key} type="button" onClick={() => setSearchParams({ section: key })} className={`settings-page__nav-item ${section.key === key ? 'settings-page__nav-item--active' : ''}`}>
                   <Icon size={17} /> {label}
                 </button>
               ))}
-              <Link to="/notifications?type=comment" className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900">Comments</Link>
-              <Link to="/notifications?type=like" className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900"><Heart size={17} /> Likes</Link>
+              <Link to="/notifications?type=comment" className="settings-page__nav-item">Comments</Link>
+              <Link to="/notifications?type=like" className="settings-page__nav-item"><Heart size={17} /> Likes</Link>
             </nav>
 
-            <section className="min-w-0 border-t border-neutral-200 pt-5 dark:border-neutral-800 md:border-l md:border-t-0 md:pl-7 md:pt-0">
-              <h2 className="mb-2 text-lg font-semibold">{section.label}</h2>
+            <section className="settings-page__section">
+              <h2 className="settings-page__section-title">{section.label}</h2>
               {section.key === 'privacy' ? (
-                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-4 dark:border-neutral-800">
+                <div className="settings-page__privacy-row">
                   <div>
-                    <p className="text-sm font-medium">Private account</p>
-                    <p className="mt-1 text-xs text-neutral-500">Only approved followers can see your posts and stories.</p>
+                    <p className="settings-page__privacy-label">Private account</p>
+                    <p className="settings-page__description">Only approved followers can see your posts and stories.</p>
                   </div>
-                  <button type="button" role="switch" aria-checked={settings.isPrivate} onClick={updatePrivacy} disabled={saving || loading} className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${settings.isPrivate ? 'bg-emerald-600' : 'bg-neutral-300 dark:bg-neutral-700'}`}>
-                    <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform ${settings.isPrivate ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <button type="button" role="switch" aria-checked={settings.isPrivate} onClick={updatePrivacy} disabled={saving || loading} className={`settings-page__switch ${settings.isPrivate ? 'settings-page__switch--on' : ''}`}>
+                    <span className="settings-page__switch-thumb" />
                   </button>
                 </div>
               ) : (
                 <>
-                  <p className="mb-4 text-xs text-neutral-500">Manage accounts in your {section.label.toLowerCase()} list.</p>
-                  {!loading && selectedPeople.length === 0 && <p className="border-b border-neutral-200 py-4 text-sm text-neutral-500 dark:border-neutral-800">No accounts in this list.</p>}
+                  <p className="settings-page__helper">Manage accounts in your {section.label.toLowerCase()} list.</p>
+                  {!loading && selectedPeople.length === 0 && <p className="settings-page__empty-row">No accounts in this list.</p>}
                   {selectedPeople.map((person) => (
-                    <div key={person._id} className="flex items-center gap-3 border-b border-neutral-200 py-3 dark:border-neutral-800">
-                      <Avatar src={person.profilePic} name={person.username} className="h-9 w-9" />
-                      <span className="min-w-0 flex-1 truncate text-sm font-medium">{person.username}</span>
-                      <button type="button" disabled={saving} onClick={() => updateList(person._id, 'remove')} className="text-xs font-semibold text-blue-600 disabled:opacity-50">Remove</button>
+                    <div key={person._id} className="settings-page__person-row">
+                      <Avatar src={person.profilePic} name={person.username} className="settings-page__person-avatar" />
+                      <span className="settings-page__person-name">{person.username}</span>
+                      <button type="button" disabled={saving} onClick={() => updateList(person._id, 'remove')} className="settings-page__remove">Remove</button>
                     </div>
                   ))}
-                  <div className="relative my-4">
-                    <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-                    <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Find an account" className="w-full rounded-lg bg-neutral-100 py-2 pl-9 pr-3 text-sm outline-none dark:bg-neutral-900" />
+                  <div className="settings-page__search">
+                    <Search size={15} className="settings-page__search-icon" />
+                    <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Find an account" className="settings-page__search-input" />
                   </div>
-                  {!loading && availablePeople.length === 0 && <p className="py-3 text-sm text-neutral-500">No accounts available.</p>}
+                  {!loading && availablePeople.length === 0 && <p className="settings-page__state">No accounts available.</p>}
                   {availablePeople.slice(0, 20).map((person) => (
-                    <button key={person._id} type="button" disabled={saving} onClick={() => updateList(person._id, 'add')} className="flex w-full items-center gap-3 border-b border-neutral-200 py-3 text-left hover:bg-neutral-100 disabled:opacity-50 dark:border-neutral-800 dark:hover:bg-neutral-900">
-                      <Avatar src={person.profilePic} name={person.username} alt={person.username} className="h-9 w-9" />
-                      <span className="flex min-w-0 flex-1 flex-col">
-                        <span className="truncate text-sm font-medium">{person.username}</span>
-                        {person.fullName && <span className="truncate text-xs text-neutral-500">{person.fullName}</span>}
+                    <button key={person._id} type="button" disabled={saving} onClick={() => updateList(person._id, 'add')} className="settings-page__person-button">
+                      <Avatar src={person.profilePic} name={person.username} alt={person.username} className="settings-page__person-avatar" />
+                      <span className="settings-page__person-details">
+                        <span className="settings-page__person-name">{person.username}</span>
+                        {person.fullName && <span className="settings-page__person-full-name">{person.fullName}</span>}
                       </span>
-                      <span className="text-xs font-semibold text-blue-600">Add</span>
+                      <span className="settings-page__person-action">Add</span>
                     </button>
                   ))}
                 </>
               )}
-              {loading && <p className="py-6 text-sm text-neutral-500">Loading settings...</p>}
-              {error && <p role="alert" className="mt-4 text-sm text-red-500">{error}</p>}
+              {loading && <p className="settings-page__state">Loading settings...</p>}
+              {error && <p role="alert" className="settings-page__state settings-page__state--error">{error}</p>}
             </section>
           </div>
         </main>

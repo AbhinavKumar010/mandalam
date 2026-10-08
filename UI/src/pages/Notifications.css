@@ -1,0 +1,17 @@
+.notifications-page { min-height: 100vh; background: #f5f7f4; color: #171717; }
+.dark .notifications-page { background: #000; color: #fff; }
+.notifications-page__layout { display: flex; }
+.notifications-page__content { width: 100%; max-width: 680px; flex: 1; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
+.notifications-page__title { margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; }
+.notifications-page__state { padding: 2.5rem 0; color: #748078; text-align: center; font-size: .875rem; }
+.notifications-page__state--error { color: #dc2626; }
+.notification-item { display: flex; align-items: center; gap: .75rem; padding: 1rem .5rem; border-bottom: 1px solid #e0e6df; }
+.dark .notification-item { border-color: #262626; }
+.notification-item--unread { background: rgb(255 228 230 / 70%); }
+.dark .notification-item--unread { background: rgb(76 5 25 / 20%); }
+.notification-item__avatar { width: 2.5rem; height: 2.5rem; }
+.notification-item__text { min-width: 0; flex: 1; font-size: .875rem; }
+.notification-item__actor { font-weight: 600; }
+.notification-item__date { margin-left: .5rem; color: #748078; font-size: .75rem; }
+.notification-item__post { width: 2.75rem; height: 2.75rem; border-radius: .25rem; object-fit: cover; }
+@media (min-width: 768px) { .notifications-page__content { padding: 2.5rem 2rem; } }

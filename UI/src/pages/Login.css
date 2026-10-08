@@ -1,0 +1,28 @@
+.login-page { display: flex; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; background: #f5f7f4; }
+.dark .login-page { background: #000; }
+.login-page__card, .login-page__signup { width: 100%; max-width: 350px; border: 1px solid #d4d4d4; background: #fff; text-align: center; }
+.dark .login-page__card, .dark .login-page__signup { border-color: #262626; background: #171717; }
+.login-page__card { padding: 2rem 2.5rem; border-radius: 2px; box-shadow: 0 1px 3px #00000012; }
+.login-page__brand { margin-bottom: 2rem; color: #202b25; font-family: Georgia, 'Times New Roman', serif; font-size: 2.25rem; font-weight: 700; }
+.dark .login-page__brand { color: #fff; }
+.login-page__error { margin-bottom: 1rem; padding: .625rem; border: 1px solid #fecaca; border-radius: .25rem; background: #fef2f2; color: #dc2626; font-size: .75rem; }
+.dark .login-page__error { border-color: #7f1d1d; background: #450a0a66; }
+.login-page__form { display: flex; flex-direction: column; gap: .625rem; }
+.login-page__field { position: relative; }
+.login-page__input { width: 100%; padding: .625rem 2.5rem .625rem .75rem; border: 1px solid #d4d4d4; border-radius: 2px; background: #f5f7f4; color: #202b25; font-size: .75rem; }
+.login-page__input::placeholder { color: #a3a3a3; }
+.dark .login-page__input { border-color: #404040; background: #262626; color: #fff; }
+.login-page__password-toggle { position: absolute; top: 50%; right: .625rem; display: inline-flex; color: #a3a3a3; transform: translateY(-50%); }
+.login-page__submit, .register-page__submit { padding: .5rem; border-radius: 2px; background: #d6533c; color: #fff; font-size: .75rem; font-weight: 600; }
+.login-page__submit { width: 100%; margin-top: .5rem; }
+.login-page__submit:disabled, .register-page__submit:disabled { opacity: .4; }
+.login-page__separator { display: flex; align-items: center; margin: 1.25rem 0; }
+.login-page__separator-line { height: 1px; flex: 1; background: #e5e5e5; }
+.dark .login-page__separator-line { background: #262626; }
+.login-page__separator-label { padding: 0 1rem; color: #a3a3a3; font-size: .75rem; font-weight: 600; text-transform: uppercase; }
+.login-page__forgot { color: #244c3c; font-size: .75rem; font-weight: 500; }
+.dark .login-page__forgot { color: #93c5fd; }
+.login-page__signup { margin-top: .75rem; padding: 1.25rem; border-radius: 2px; }
+.login-page__signup-copy { color: #748078; font-size: .75rem; }
+.login-page__link { color: #c94c36; font-weight: 600; }
+.login-page__link:hover, .login-page__forgot:hover { text-decoration: underline; }

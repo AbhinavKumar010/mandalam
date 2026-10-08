@@ -1,0 +1,22 @@
+.explore-page { display: flex; min-height: 100vh; background: #f5f7f4; color: #000; }
+.dark .explore-page { background: #000; color: #fff; }
+.explore-page__content { width: 100%; max-width: 935px; flex: 1; margin: 0 auto; padding: 2rem 1rem 5rem; }
+.explore-page__search { position: relative; max-width: 28rem; margin: 0 auto 2rem; }
+.explore-page__search-icon { position: absolute; top: 50%; left: .875rem; color: #748078; transform: translateY(-50%); }
+.explore-page__search-input { width: 100%; padding: .5rem 1rem .5rem 2.5rem; border: 0; border-radius: .5rem; background: #e7ebe6; font-size: .875rem; outline: none; }
+.dark .explore-page__search-input { background: #262626; color: #fff; }
+.explore-page__search-input:focus { box-shadow: 0 0 0 1px #7f9d89; }
+.explore-page__state { padding: 3rem 0; color: #748078; text-align: center; font-size: .875rem; }
+.explore-page__state--error { color: #dc2626; }
+.explore-page__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.explore-page__tile { position: relative; aspect-ratio: 1; overflow: hidden; background: #eef1ed; cursor: pointer; }
+.dark .explore-page__tile { background: #171717; }
+.explore-page__media { width: 100%; height: 100%; object-fit: cover; transition: transform 300ms ease; }
+.explore-page__tile:hover .explore-page__media { transform: scale(1.05); }
+.explore-page__overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 1.5rem; background: rgb(0 0 0 / 40%); color: #fff; font-size: .875rem; font-weight: 600; opacity: 0; transition: opacity 160ms ease; }
+.explore-page__tile:hover .explore-page__overlay { opacity: 1; }
+.explore-page__overlay-count { display: inline-flex; align-items: center; gap: .375rem; }
+.explore-page__modal { position: fixed; z-index: 50; inset: 0; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgb(0 0 0 / 70%); }
+.explore-page__modal-content { position: relative; width: 100%; max-width: 470px; }
+.explore-page__modal-close { position: absolute; top: -2.5rem; right: -.5rem; color: #fff; }
+@media (min-width: 768px) { .explore-page__content { padding-bottom: 2rem; } .explore-page__grid { gap: 1rem; } }
